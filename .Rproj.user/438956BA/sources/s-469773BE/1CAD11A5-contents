@@ -1,0 +1,14 @@
+#' @title Requirement data set
+#'
+#' @description Data set containing the performance of 61 undergraduate Statistics students in Stochastic Process and
+#'              its required courses.
+#' @details The performance in each course is taken as the grade in the course, a number between \emph{0} and \emph{10}.
+#' @return \item{C1}{The performance in Calculus I.}
+#' @return \item{C2}{The performance in Calculus II.}
+#' @return \item{C3}{The performance in Calculus III.}
+#' @return \item{P1}{The performance in Probability I.}
+#' @return \item{P2}{The performance in Probability II.}
+#' @return \item{SP}{Performance in Stochastic Process.}
+#' @return \item{Year}{The year each student enrolled in the undergraduate course.}
+#' @references Simonis, A., Marcondes, D., Barrera, J. (2017) Feature Selection based on the Local Lift Dependence Scale. \emph{Submitted}
+"requirement"
