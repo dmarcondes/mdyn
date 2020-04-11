@@ -1,6 +1,6 @@
-#' @export
 #' @import tidyr
 #' @import ggplot2
+#' @export
 #' @title Plot Infected x Risk of Infection
 #'
 #' @description Build various plots combining the number of infected by COVID-19 in a city of a state in Brazil and the risk of infection
