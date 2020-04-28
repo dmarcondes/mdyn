@@ -317,7 +317,9 @@ isolation_map <- function(end_quar = "2020-04-26"){
         geom_hline(data = dline,aes(yintercept = y),
                    color = "white",linetype = "dashed")
 
-      pdf(file = paste("./plots/isol_",acento(gsub(pattern = " ",replacement = "",x = c)),"_",s,".pdf",sep = ""),width = 1.2*15,
+      pdf(file = paste("./plots/isol_",
+                       acento(gsub("/","",gsub(pattern = " ",replacement = "",x = c))),
+                       "_",s,".pdf",sep = ""),width = 1.2*15,
           height = 1.2*10)
       print(p)
       dev.off()
