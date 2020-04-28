@@ -34,14 +34,14 @@
 
 isolation_map <- function(end_quar = "2020-04-26"){
 
-  q <- readline("This will erase all content in /home/diego/mdyn/plots, are you sure you wnat to continue (y/n)?")
+  q <- readline(paste("This will erase all content in ",getwd(),"/plots, are you sure you wnat to continue (y/n)?",sep = ""))
   if(!(q %in% c("y","Y","yes","Yes","YES","sim","SIM","s","S"))){
     cat("Sorry, cannot help you then.\n")
     return(0)
   }
 
   #Set wd
-  setwd("/home/diego/mdyn")
+  #setwd("/home/diego/mdyn")
 
   #parameters
   dic_estados = list('AC' = 'Acre','AL' = 'Alagoas','AP' = 'Amapá','AM' = 'Amazonas',
@@ -81,7 +81,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   rc_2 <- colorRampPalette(colors = c("red","green"), space = "Lab")(3)
 
   #Get IME logo
-  logo <- get_png("./logos/IME_simplificado.png")
+  logo <- get_png("/home/diego/dmyn/logos/IME_simplificado.png")
 
   #Files
   files <- paste("/home/pedrosp/mdyn/inloco/",estados,"_Municipios_",end_quar,"_iso_index.csv",sep = "")
@@ -147,7 +147,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   cat("\n")
   system("rm -r ./html")
   dir.create("./html")
-  system("cp -r ./logos/ ./html/logos")
+  system("cp -r /home/diego/mdyn/logos/ ./html/logos")
 
   #Reading data and shapefile
   dadosBR <- data.frame()
@@ -234,7 +234,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
     #Save
-    saveWidget(mapa, file = paste("/home/diego/mdyn/html/mapa_",s,".html",sep = ""))
+    saveWidget(mapa, file = paste(getwd(),"/html/mapa_",s,".html",sep = ""))
     cat(" Ok!")
     cat("\n")
   }
