@@ -81,7 +81,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   rc_2 <- colorRampPalette(colors = c("red","green"), space = "Lab")(3)
 
   #Get IME logo
-  logo <- get_png("/home/diego/dmyn/logos/IME_simplificado.png")
+  logo <- get_png("./logos/IME_simplificado.png")
 
   #Files
   files <- paste("/home/pedrosp/mdyn/inloco/",estados,"_Municipios_",end_quar,"_iso_index.csv",sep = "")
