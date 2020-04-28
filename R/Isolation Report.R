@@ -224,8 +224,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
                   options = popupOptions(opacity = 0,closeButton = FALSE),
                   opacity = 0.5,fillOpacity = 0.5,label = HTML(paste('<strong>',tmpS$NM_MUNICIP,'-',tmpS$UF.x,"\n",
                                                                 round(100*tmp$iso),"%",'</strong>')),
-                  labelOptions = labelOptions(textsize = "15px"),
-                  style = list("font-style" = "bold")) %>%
+                  labelOptions = labelOptions(textsize = "15px")) %>%
       addPolylines(data = shp[shp$UF == s,], color = "black", opacity = 1, weight = 1) %>%
       addLegend(position = "bottomright", pal = mypal, values = 100*tmp$iso,na.label = "Sem dados",
                 title = paste("Índice de Isolamento social (%) <br> em ",format.Date(end_quar, "%d"),"/",
