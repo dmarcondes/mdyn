@@ -233,7 +233,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
     #Save
-    saveWidget(mapa, file = paste("./html/mapa_",s,".html",sep = ""))
+    saveWidget(mapa, file = paste("/home/diego/mdyn/html/mapa_",s,".html",sep = ""))
     cat(" Ok!")
     cat("\n")
   }
