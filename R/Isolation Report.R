@@ -146,6 +146,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   cat("Building maps and saving in html...")
   cat("\n")
   system("rm -r ./html")
+  system("cp -r ./logos/ ./html/logos")
   dir.create("./html")
 
   #Reading data and shapefile
@@ -224,8 +225,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
                                                                        x = tmpS$NM_MUNICIP)),'_',tmpS$UF.x,
                                 '.png width="750" height="500"/>',sep = ""),
                   options = popupOptions(opacity = 0,closeButton = FALSE),
-                  opacity = 0.5,fillOpacity = 0.5,label = HTML(paste('<strong>',tmpS$NM_MUNICIP,'-',tmpS$UF.x,"\n",
-                                                                round(100*tmp$iso),"%",'</strong>')),
+                  opacity = 0.5,fillOpacity = 0.5,label = paste(tmpS$NM_MUNICIP,'-',tmpS$UF.x,"\n",
+                                                                round(100*tmp$iso),"%"),
                   labelOptions = labelOptions(textsize = "15px")) %>%
       addPolylines(data = shp[shp$UF == s,], color = "black", opacity = 1, weight = 1) %>%
       addLegend(position = "bottomright", pal = mypal, values = 100*tmp$iso,na.label = "Sem dados",
@@ -243,8 +244,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
   #Bulding plots
   cat("Building plots and saving in pdf...")
   cat("\n")
-  system("rm -r ./plots")
-  dir.create("./plots")
+  system("rm -r ./html/plots")
+  dir.create("./html/plots")
 
   for(s in estados){
     cat("State: ")
@@ -317,7 +318,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
         geom_hline(data = dline,aes(yintercept = y),
                    color = "white",linetype = "dashed")
 
-      pdf(file = paste("./plots/isol_",
+      pdf(file = paste("./html/plots/isol_",
                        acento(gsub("/","",gsub(pattern = " ",replacement = "",x = c))),
                        "_",s,".pdf",sep = ""),width = 1.2*15,
           height = 1.2*10)
@@ -333,7 +334,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   #Convert plots to png
   cat("Converting plots to png...")
   cat("\n")
-  system("cd ./plots/ && ")
+  system("cd ./html/plots/ && mogrify -verbose -density 200 -format png ./*.pdf")
   cat("OK!")
   cat("\n")
   cat("The end!!")
