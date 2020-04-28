@@ -145,6 +145,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
   #Bulding maps
   cat("Building maps and saving in html...")
   cat("\n")
+  system("rm -r ./html")
+  dir.create("./html")
 
   #Reading data and shapefile
   dadosBR <- data.frame()
@@ -231,8 +233,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
     #Save
-    saveWidget(mapa, file = paste("mapa_",s,".html",sep = ""))
-    cat("Ok!")
+    saveWidget(mapa, file = paste("./html/mapa_",s,".html",sep = ""))
+    cat(" Ok!")
     cat("\n")
   }
   cat("Ok!")
@@ -320,7 +322,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
       print(p)
       dev.off()
     }
-    cat("Ok!")
+    cat(" Ok!")
     cat("\n")
   }
   cat("Ok!")
