@@ -263,6 +263,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
     dados$cor[dados$indice == "iso"] <- "white"
     dados$cor <- factor(dados$cor)
     dados$indice[dados$indice == "indice_pan" & dados$day < max(dados$day) - 7] <- NA
+    dados$indice[dados$indice == "indice_week" & dados$day < max(dados$day) - 7] <- NA
 
     breaks_fun <- function(x) {
       if(min(x) > as.numeric(max(dados$day)) - 8)
