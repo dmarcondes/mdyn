@@ -146,8 +146,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
   cat("Building maps and saving in html...")
   cat("\n")
   system("rm -r ./html")
-  system("cp -r ./logos/ ./html/logos")
   dir.create("./html")
+  system("cp -r ./logos/ ./html/logos")
 
   #Reading data and shapefile
   dadosBR <- data.frame()
