@@ -26,7 +26,7 @@
 #'
 #' @param end_quar The last day with data about the isolation index. Should be in the format yyy-mm-dd.
 #'
-#' @param states A vector with the states to build plots for. It should contain the two letters representing the name #' @return Save all maps and plots in the working directory.
+#' @return Save all maps and plots in the working directory.
 #'
 #' @example
 #' #Run for data until 2020-04-26
