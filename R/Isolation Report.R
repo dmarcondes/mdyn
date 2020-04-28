@@ -233,6 +233,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
     #Save
     saveWidget(mapa, file = paste("mapa_",s,".html",sep = ""))
     cat("Ok!")
+    cat("\n")
   }
   cat("Ok!")
   cat("\n")
@@ -319,6 +320,8 @@ isolation_map <- function(end_quar = "2020-04-26"){
       print(p)
       dev.off()
     }
+    cat("Ok!")
+    cat("\n")
   }
   cat("Ok!")
   cat("\n")
