@@ -98,7 +98,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   dir.create(path = "./dataR")
   cat("Organizing data and saving in rds files...")
   cat("\n")
-  foreach(s = estados) %dopar% {
+  for(s in estados){
     cat("State: ")
     cat(s)
     dados <- data.frame(read.csv(files[[s]]))
