@@ -242,7 +242,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
                   labelOptions = labelOptions(textsize = "15px")) %>%
       addPolylines(data = shp[shp$UF == s,], color = "black", opacity = 1, weight = 1) %>%
       addLegend(position = "bottomright", pal = mypal, values = 100*tmpS$iso,na.label = "Sem dados",
-                title = paste("Índice de Isolamento social (%) <br> em ",format.Date(end_quar, "%d"),"/",
+                title = paste("Índice de Isolamento social (0-100) <br> em ",format.Date(end_quar, "%d"),"/",
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
     #Save
@@ -314,7 +314,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
         xlab("Data") + facet_wrap(indice~.,scales = "free",
-                                  labeller = as_labeller(c(iso = "Índice de Isolamento Social (%)",
+                                  labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
                                                            indice_week = "Variação em relação a semana anterior (%)",
                                                            indice_pan = "Variação em relação ao padrão durante pandemia (%)",
                                                            indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
