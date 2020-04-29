@@ -81,7 +81,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   rc_2 <- colorRampPalette(colors = c("red","green"), space = "Lab")(3)
 
   #Get IME logo
-  logo <- get_png("./logos/IME_simplificado.png")
+  #logo <- get_png("./logos/IME_simplificado.png")
 
   #Files
   files <- paste("/home/pedrosp/mdyn/inloco/",estados,"_Municipios_",end_quar,"_iso_index.csv",sep = "")
@@ -272,12 +272,19 @@ isolation_map <- function(end_quar = "2020-04-26"){
     dados$indice[dados$indice == "indice_week" & dados$day < max(dados$day) - 7] <- NA
 
     breaks_fun <- function(x) {
-      if(min(x) > as.numeric(max(dados$day)) - 8)
-        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 1)
-      else if(min(x) > ymd("2020-03-25"))
-        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 4)
+      if(length(x) < 10)
+        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 1) %>% format("%d/%m")
       else
-        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 5)
+        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 5) %>% format("%d/%m")
+    }
+
+    breaks_fun_y <- function(x) {
+      if(max(abs(x),na.rm = T) < 50)
+        seq(from = -50,to = 50,by = 2.5)
+      else if(max(abs(x),na.rm = T) < 100)
+        seq(from = -100,to = 100,by = 5)
+      else
+        seq(from = -1000,to = 1000,by = 20)
     }
 
     for(c in unique(dados$reg_name)){
@@ -296,6 +303,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
       }
       tmp$color_line[is.na(tmp$color_line)] <- "white"
       tmp$color_line <- factor(tmp$color_line)
+      tmp$day <- factor(tmp$day %>% format("%d/%m"),unique(tmp$day)[order(unique(tmp$day))]  %>% format("%d/%m"))
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
         xlab("Data") + facet_wrap(indice~.,scales = "free",
@@ -308,18 +316,18 @@ isolation_map <- function(end_quar = "2020-04-26"){
               strip.text = element_text(size = 20,face = "bold",color = "white")) +
         geom_point() + geom_line(aes(colour = color_line,group = 1)) +
         scale_colour_manual(values = c("green","red","white")) +
-        scale_x_date(breaks = breaks_fun) +
+        scale_x_discrete(breaks = breaks_fun) +
         theme(legend.title = element_text(face = "bold"),legend.position = "none") +
-        theme(plot.title = element_text(face = "bold",size = 20,color = "white"),
-              axis.text.x = element_text(size = 10,face = "bold",color = "white"),
+        theme(plot.title = element_text(face = "bold",size = 25,color = "white",hjust = 0.5),
+              axis.text.x = element_text(size = 15,face = "bold",color = "white"),
               axis.text.y = element_text(size = 15,face = "bold",color = "white"),
               legend.box.margin = unit(x=c(20,0,0,0),units="mm"),
               legend.key.width=unit(3.5,"cm"),panel.grid.major.y = element_blank(),
               panel.grid.minor.y = element_blank(),
               axis.title = element_text(color = "white",size = 20),
-              plot.caption = element_text(face = "bold",color = "white",hjust = 0)) +
+              plot.caption = element_text(face = "bold",color = "white",hjust = 0,size = 15)) +
         theme(plot.margin = unit(c(1,1,1,1), "lines")) +
-        scale_y_continuous(breaks = seq(-500,500,10)) +
+        scale_y_continuous(breaks = breaks_fun_y) +
         ggtitle(paste("Isolamento Social Comparativo IME - USP\n",c," - ",s,sep = "")) +
         labs(caption = "©IME - USP. Design: Diego Marcondes. Para mais informações e conteúdo sobre a COVID-19 acesse www.ime.usp.br/~pedrosp/covid19/") +
         geom_hline(data = dline,aes(yintercept = y),
@@ -327,8 +335,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
 
       pdf(file = paste("./html/plots/isol_",
                        acento(gsub("/","",gsub(pattern = " ",replacement = "",x = c))),
-                       "_",s,".pdf",sep = ""),width = 1.2*15,
-          height = 1.2*10)
+                       "_",s,".pdf",sep = ""),width = 1.3*15,height = 1.2*10)
       print(p)
       dev.off()
     }
