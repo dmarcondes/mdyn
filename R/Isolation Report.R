@@ -344,7 +344,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   system("cd ./html/plots/ && mogrify -verbose -density 100 -format png ./*.pdf")
   cat("OK!")
   cat("\n")
-  cat("The end!!")
+  cat("The end!!\n")
 }
 
 
