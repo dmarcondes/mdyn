@@ -19,6 +19,8 @@
 #' @import leaflet
 #' @import grid
 #' @import gridExtra
+#' @import foreach
+#' @import doParallel
 #' @export
 #' @title Isolation Map in Brazil
 #'
@@ -39,6 +41,10 @@ isolation_map <- function(end_quar = "2020-04-26"){
     cat("Sorry, cannot help you then.\n")
     return(0)
   }
+
+  #Parallel
+  cl <- makeCluster(4) #not to overload your computer
+  registerDoParallel(cl)
 
   #Set wd
   #setwd("/home/diego/mdyn")
@@ -92,7 +98,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   dir.create(path = "./dataR")
   cat("Organizing data and saving in rds files...")
   cat("\n")
-  for(s in estados){
+  foreach(s = estados) %dopar% {
     cat("State: ")
     cat(s)
     dados <- data.frame(read.csv(files[[s]]))
@@ -210,7 +216,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   mypal <- colorNumeric(palette = rc_cont,domain = 100*tmp$iso)
 
   #Build maps
-  for(s in estados){
+  foreach(s = estados) %dopar% {
     cat(paste("State:",s))
     tmpS <- tmp[tmp$UF.x == s,]
     title <- tags$div(tag.map.title, HTML(paste("Isolamento Social Comparativo IME - USP <br>",dic_estados[[s]])))
@@ -253,7 +259,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   system("rm -r ./html/plots")
   dir.create("./html/plots")
 
-  for(s in estados){
+  foreach(s = estados) %dopar% {
     cat("State: ")
     cat(s)
     cat("...")
@@ -344,6 +350,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   }
   cat("Ok!")
   cat("\n")
+  stopCluster(cl)
 
   #Convert plots to png
   cat("Converting plots to png...")
