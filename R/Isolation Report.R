@@ -166,7 +166,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
       dadosBR <- rbind.data.frame(dadosBR,dados)
   }
   dadosBR$key <- factor(paste(dadosBR$reg_name,dadosBR$UF))
-  dadosBR <- dadosBR %>% filter(day == "2020-03-24") %>% unique()
+  dadosBR <- dadosBR %>% filter(day == end_quar) %>% unique()
   manter <- names(table(dadosBR$key))[table(dadosBR$key) == 1]
   dadosBR <- dadosBR %>% filter(key %in% manter)
   shp <- readOGR("/home/pedrosp/mdyn/maps/br_municipios/br_mun_with_uf.shp",verbose = F)
