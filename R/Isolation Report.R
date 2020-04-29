@@ -259,7 +259,8 @@ isolation_map <- function(end_quar = "2020-04-27"){
   system("rm -r ./html/plots")
   dir.create("./html/plots")
 
-  foreach(s = estados,.packages = c("raster","tidyverse","ggplot2","ggthemes","mdyn")) %dopar% {
+  foreach(s = estados,.packages = c("raster","tidyverse","ggplot2","ggthemes","lubridate")) %dopar% {
+    acento <- function(x) iconv(x, to = "ASCII//TRANSLIT")
     cat("State: ")
     cat(s)
     cat("...")
