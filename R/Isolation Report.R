@@ -299,14 +299,14 @@ isolation_map <- function(end_quar = "2020-04-26"){
                                                            indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
         ylab(NULL) +
         theme(strip.background = element_blank(),
-              strip.text = element_text(size = 15,face = "bold",color = "white")) +
+              strip.text = element_text(size = 20,face = "bold",color = "white")) +
         geom_point() + geom_line(aes(colour = color_line,group = 1)) +
         scale_colour_manual(values = c("green","red","white")) +
         scale_x_date(breaks = breaks_fun) +
         theme(legend.title = element_text(face = "bold"),legend.position = "none") +
-        theme(plot.title = element_text(face = "bold",size = 20,color = "white"),
-              axis.text.x = element_text(size = 10,face = "bold",color = "white"),
-              axis.text.y = element_text(size = 10,face = "bold",color = "white"),
+        theme(plot.title = element_text(face = "bold",size = 25,color = "white"),
+              axis.text.x = element_text(size = 15,face = "bold",color = "white"),
+              axis.text.y = element_text(size = 20,face = "bold",color = "white"),
               legend.box.margin = unit(x=c(20,0,0,0),units="mm"),
               legend.key.width=unit(3.5,"cm"),panel.grid.major.y = element_blank(),
               panel.grid.minor.y = element_blank(),
