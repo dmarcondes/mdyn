@@ -226,16 +226,16 @@ isolation_map <- function(end_quar = "2020-04-26"){
       addControl(fapesp, position = "bottomleft") %>%
       addControl(voltar, position = "topleft") %>%
       addControl(obs, position = "bottomright") %>%
-      addPolygons(data = tmpS,fillColor = mypal(100*tmp$iso),color = "grey",
+      addPolygons(data = tmpS,fillColor = mypal(100*tmpS$iso),color = "grey",
                   popup = paste('<img src = ./plots/isol_',acento(gsub(pattern = " ",replacement = "",
                                                                        x = tmpS$NM_MUNICIP)),'_',tmpS$UF.x,
                                 '.png width="750" height="500"/>',sep = ""),
                   options = popupOptions(opacity = 0,closeButton = FALSE),
                   opacity = 0.5,fillOpacity = 0.5,label = paste(tmpS$NM_MUNICIP,'-',tmpS$UF.x,"\n",
-                                                                round(100*tmp$iso),"%"),
+                                                                round(100*tmpS$iso),"%"),
                   labelOptions = labelOptions(textsize = "15px")) %>%
       addPolylines(data = shp[shp$UF == s,], color = "black", opacity = 1, weight = 1) %>%
-      addLegend(position = "bottomright", pal = mypal, values = 100*tmp$iso,na.label = "Sem dados",
+      addLegend(position = "bottomright", pal = mypal, values = 100*tmpS$iso,na.label = "Sem dados",
                 title = paste("Índice de Isolamento social (%) <br> em ",format.Date(end_quar, "%d"),"/",
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
