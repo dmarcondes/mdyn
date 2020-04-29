@@ -34,7 +34,7 @@
 #' #Run for data until 2020-04-26
 #' isolation_map(end_quar = "2020-04-26) #Take very long time!!
 
-isolation_map <- function(end_quar = "2020-04-26"){
+isolation_map <- function(end_quar = "2020-04-27"){
 
   q <- readline(paste("This will erase all content in ",getwd(),"/plots, are you sure you wnat to continue (y/n)?",sep = ""))
   if(!(q %in% c("y","Y","yes","Yes","YES","sim","SIM","s","S"))){
@@ -43,7 +43,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   }
 
   #Parallel
-  cl <- makeCluster(4) #not to overload your computer
+  cl <- makeCluster(27)
   registerDoParallel(cl)
 
   #Set wd
@@ -259,7 +259,7 @@ isolation_map <- function(end_quar = "2020-04-26"){
   system("rm -r ./html/plots")
   dir.create("./html/plots")
 
-  foreach(s = estados) %dopar% {
+  foreach(s = estados,.packages = c("raster","tidyverse","ggplot2","ggthemes","mdyn")) %dopar% {
     cat("State: ")
     cat(s)
     cat("...")
