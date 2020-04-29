@@ -131,6 +131,12 @@ isolation_map <- function(end_quar = "2020-04-26"){
     dados$indice_pan <- indice_relativo(iso = dados$iso,media = dados$mean_pan)
     dados$indice_week <- indice_relativo(iso = dados$iso,media = dados$last_week)
 
+    #All days
+    tmp <- dados %>% dplyr::select(day,iso,reg_name) %>% unique()
+    a <- tapply(X = tmp$day,INDEX = tmp$reg_name,FUN = function(x) length(unique(x)))
+    a <- names(a)[a == length(ymd("2020-03-15"):ymd(end_quar))]
+    dados <- dados %>% filter(reg_name %in% a)
+
     #Salvando
     saveRDS(object = dados,file = paste("./dataR/",s,".rds",sep = ""))
 
