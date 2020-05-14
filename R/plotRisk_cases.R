@@ -84,7 +84,7 @@ plotRisk_cases <- function(states = "all",day = "today",day.init = NULL,day.fina
   data <- read.csv(textConnection(txt))
   data <- data[tolower(data$state) %in% states,]
   data <- data[data$date %in% day,]
-  data <- data[,c(1,3,7,8,10,11,13)]
+  data <- data[,c(1,3,8,9,11,12,15)]
   data$city <- as.character(toupper(data$city))
   data <- data[data$city != "Importados/Indefinidos",]
   if(nrow(data) == 0)
@@ -119,7 +119,7 @@ plotRisk_cases <- function(states = "all",day = "today",day.init = NULL,day.fina
     plots[[s]] <- list()
     for(d in day){
       tmp <- risk_data[[s]]
-      tmp$date[is.na(tmp$date)] <- d
+      #tmp$date[is.na(tmp$date)] <- d
       tmp <- tmp[tmp$date == d,]
       tmp_invert <- tidyr::gather(tmp,"s","rank",-City,-State,-risk_lesser,-risk_greater,-risk,-dist,-populacao_estimada,
                                           -date,-last_available_confirmed,-last_available_confirmed_per_100k_inhabitants,
