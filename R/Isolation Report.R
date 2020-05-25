@@ -36,11 +36,11 @@
 
 isolation_map <- function(end_quar = "2020-04-27"){
 
-  q <- readline(paste("This will erase all content in ",getwd(),"/plots, are you sure you wnat to continue (y/n)?",sep = ""))
-  if(!(q %in% c("y","Y","yes","Yes","YES","sim","SIM","s","S"))){
-    cat("Sorry, cannot help you then.\n")
-    return(0)
-  }
+  #q <- readline(paste("This will erase all content in ",getwd(),"/plots, are you sure you wnat to continue (y/n)?",sep = ""))
+  #if(!(q %in% c("y","Y","yes","Yes","YES","sim","SIM","s","S"))){
+  #  cat("Sorry, cannot help you then.\n")
+  #  return(0)
+  #}
 
   #Parallel
   cl <- makeCluster(27)
