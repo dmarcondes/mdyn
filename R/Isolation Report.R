@@ -356,7 +356,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
   #Convert plots to png
   cat("Converting plots to png...")
   cat("\n")
-  system("source ./sh/pdf2png.sh")
+  system("./sh/pdf2png.sh")
   cat("OK!")
   cat("\n")
   cat("The end!!\n")
