@@ -314,7 +314,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
       tmp$indice <- factor(x = tmp$indice,levels = c("iso","indice_pre","indice_week","indice_pan"))
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
-        xlab("Data") + facet_grid(indice~.,scales = "free",
+        xlab("Data") + facet_grid(indice~.,scales = "free",rows = 2,cols = 2,
                                   labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
                                                            indice_week = "Variação em relação a semana anterior (%)",
                                                            indice_pan = "Variação em relação ao padrão durante pandemia (%)",
