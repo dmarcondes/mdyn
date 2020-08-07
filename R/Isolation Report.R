@@ -311,7 +311,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
       tmp$color_line[is.na(tmp$color_line)] <- "white"
       tmp$color_line <- factor(tmp$color_line)
       tmp$day <- factor(tmp$day %>% format("%d/%m"),unique(tmp$day)[order(unique(tmp$day))]  %>% format("%d/%m"))
-      tmp$indice <- factor(x = tmp$indice,levels = c("iso","indice_pre","indice_week","indice_pan"))
+      tmp$indice <- factor(x = tmp$indice,levels = c("indice_pan","indice_pre","indice_week","iso"))
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
         xlab("Data") + facet_wrap(.~indice,scales = "free",nrow = 2,ncol = 2,
