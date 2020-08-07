@@ -314,11 +314,11 @@ isolation_map <- function(end_quar = "2020-04-27"){
       tmp$indice <- factor(x = tmp$indice,levels = c("indice_pan","indice_pre","indice_week","iso"))
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
-        xlab("Data") + facet_wrap(.~indice,scales = "free",nrow = 2,ncol = 2) +
-                                #  labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
-                                #                           indice_week = "Variação em relação a semana anterior (%)",
-                                #                           indice_pan = "Variação em relação ao padrão durante pandemia (%)",
-                                #                           indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
+        xlab("Data") + facet_wrap("indice",scales = "free",nrow = 2,ncol = 2,
+                                  labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
+                                                           indice_week = "Variação em relação a semana anterior (%)",
+                                                           indice_pan = "Variação em relação ao padrão durante pandemia (%)",
+                                                           indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
         ylab(NULL) +
         theme(strip.background = element_blank(),
               strip.text = element_text(size = 20,face = "bold",color = "white")) +
