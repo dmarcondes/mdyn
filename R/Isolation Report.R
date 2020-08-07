@@ -313,33 +313,33 @@ isolation_map <- function(end_quar = "2020-04-27"){
       tmp$day <- factor(tmp$day %>% format("%d/%m"),unique(tmp$day)[order(unique(tmp$day))]  %>% format("%d/%m"))
       tmp$indice <- factor(x = tmp$indice,levels = c("indice_pan","indice_pre","indice_week","iso"))
 
-      p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
+      p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + #theme_solarized(light = FALSE) +
         xlab("Data") + facet_wrap("indice",scales = "free",nrow = 2,ncol = 2,
                                   labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
                                                            indice_week = "Variação em relação a semana anterior (%)",
                                                            indice_pan = "Variação em relação ao padrão durante pandemia (%)",
-                                                           indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
-        ylab(NULL) +
-        theme(strip.background = element_blank(),
-              strip.text = element_text(size = 20,face = "bold",color = "white")) +
-        geom_point() + geom_line(aes(colour = color_line,group = 1)) +
-        scale_colour_manual(values = c("green","red","white")) +
-        scale_x_discrete(breaks = breaks_fun) +
-        theme(legend.title = element_text(face = "bold"),legend.position = "none") +
-        theme(plot.title = element_text(face = "bold",size = 25,color = "white",hjust = 0.5),
-              axis.text.x = element_text(size = 15,face = "bold",color = "white"),
-              axis.text.y = element_text(size = 15,face = "bold",color = "white"),
-              legend.box.margin = unit(x=c(20,0,0,0),units="mm"),
-              legend.key.width=unit(3.5,"cm"),panel.grid.major.y = element_blank(),
-              panel.grid.minor.y = element_blank(),
-              axis.title = element_text(color = "white",size = 20),
-              plot.caption = element_text(face = "bold",color = "white",hjust = 0,size = 15)) +
-        theme(plot.margin = unit(c(1,1,1,1), "lines")) +
-        scale_y_continuous(breaks = breaks_fun_y) +
-        ggtitle(paste("Isolamento Social Comparativo IME - USP\n",c," - ",s,sep = "")) +
-        labs(caption = "©IME - USP. Design: Diego Marcondes. Para mais informações e conteúdo sobre a COVID-19 acesse www.ime.usp.br/~pedrosp/covid19/") +
-        geom_hline(data = dline,aes(yintercept = y),
-                   color = "white",linetype = "dashed")
+                                                           indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) #+
+        #ylab(NULL) +
+        #theme(strip.background = element_blank(),
+        #      strip.text = element_text(size = 20,face = "bold",color = "white")) +
+        #geom_point() + geom_line(aes(colour = color_line,group = 1)) +
+        #scale_colour_manual(values = c("green","red","white")) +
+        #scale_x_discrete(breaks = breaks_fun) +
+        #theme(legend.title = element_text(face = "bold"),legend.position = "none") +
+        #theme(plot.title = element_text(face = "bold",size = 25,color = "white",hjust = 0.5),
+        #      axis.text.x = element_text(size = 15,face = "bold",color = "white"),
+        #      axis.text.y = element_text(size = 15,face = "bold",color = "white"),
+        #      legend.box.margin = unit(x=c(20,0,0,0),units="mm"),
+        #      legend.key.width=unit(3.5,"cm"),panel.grid.major.y = element_blank(),
+        #      panel.grid.minor.y = element_blank(),
+        #      axis.title = element_text(color = "white",size = 20),
+        #      plot.caption = element_text(face = "bold",color = "white",hjust = 0,size = 15)) +
+        #theme(plot.margin = unit(c(1,1,1,1), "lines")) +
+        #scale_y_continuous(breaks = breaks_fun_y) +
+        #ggtitle(paste("Isolamento Social Comparativo IME - USP\n",c," - ",s,sep = "")) +
+        #labs(caption = "©IME - USP. Design: Diego Marcondes. Para mais informações e conteúdo sobre a COVID-19 acesse www.ime.usp.br/~pedrosp/covid19/") +
+        #geom_hline(data = dline,aes(yintercept = y),
+        #           color = "white",linetype = "dashed")
 
       pdf(file = paste("./html/plots/isol_",
                        acento(gsub("/","",gsub(pattern = " ",replacement = "",x = c))),
