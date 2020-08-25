@@ -43,7 +43,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
   #}
 
   #Parallel
-  cl <- makeCluster(27)
+  cl <- makeCluster(8)
   registerDoParallel(cl)
 
   #Set wd
