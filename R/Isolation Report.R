@@ -246,7 +246,8 @@ isolation_map <- function(end_quar = "2020-04-27"){
                               format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
 
     #Save
-    saveWidget(mapa, file = paste(getwd(),"/html/mapa_",s,".html",sep = ""))
+    saveWidget(mapa, file = paste(getwd(),"/html/mapa_",s,".html",sep = ""),
+               selfcontained = F)
     cat(" Ok!")
     cat("\n")
   }
