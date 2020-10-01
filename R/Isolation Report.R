@@ -283,7 +283,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
       if(length(x) < 10)
         seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 1) %>% format("%d/%m")
       else
-        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 10) %>% format("%d/%m")
+        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 30) %>% format("%d/%m")
     }
 
     breaks_fun_y <- function(x) {
