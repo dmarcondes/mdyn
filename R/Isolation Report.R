@@ -140,7 +140,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
     #All days
     tmp <- dados %>% dplyr::select(day,iso,reg_name) %>% unique()
     a <- tapply(X = tmp$day,INDEX = tmp$reg_name,FUN = function(x) length(unique(x)))
-    a <- names(a)[a == length(ymd("2020-03-15"):ymd(end_quar))]
+    a <- names(a)[a > length(ymd("2020-03-15"):ymd(end_quar))/2]
     dados <- dados %>% filter(reg_name %in% a)
 
     #Salvando
@@ -171,10 +171,16 @@ isolation_map <- function(end_quar = "2020-04-27"){
     else
       dadosBR <- rbind.data.frame(dadosBR,dados)
   }
+  dadosBR <- dadosBR %>% dplyr::select(reg_name,iso,UF)
   dadosBR$key <- factor(paste(dadosBR$reg_name,dadosBR$UF))
-  dadosBR <- dadosBR %>% filter(day == end_quar) %>% unique()
-  manter <- names(table(dadosBR$key))[table(dadosBR$key) == 1]
-  dadosBR <- dadosBR %>% filter(key %in% manter)
+  dadosBR <- data.table(dadosBR)
+  dadosBR <- dadosBR[,iso := median(iso,na.rm = T),by = key]
+  dadosBR <- unique(dadosBR)
+
+  #dadosBR <- dadosBR %>% filter(day == end_quar) %>% unique()
+  #manter <- names(table(dadosBR$key))[table(dadosBR$key) == 1]
+  #dadosBR <- dadosBR %>% filter(key %in% manter)
+
   shp <- readOGR("/home/pedrosp/mdyn/maps/br_municipios/br_mun_with_uf.shp",verbose = F)
   shp$Nome_UF <- factor(shp$Nome_UF)
   shp$UF <- mapvalues(x = shp$Nome_UF,from = unlist(dic_estados),to = names(dic_estados))
@@ -216,7 +222,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
   mypal <- colorNumeric(palette = rc_cont,domain = 100*tmp$iso)
 
   #Build maps
-  foreach(s = estados) %dopar% {
+  for(s in estados){
     cat(paste("State:",s))
     tmpS <- tmp[tmp$UF.x == s,]
     title <- tags$div(tag.map.title, HTML(paste("Isolamento Social Comparativo IME - USP <br>",dic_estados[[s]])))
@@ -242,8 +248,8 @@ isolation_map <- function(end_quar = "2020-04-27"){
                   labelOptions = labelOptions(textsize = "15px")) %>%
       addPolylines(data = shp[shp$UF == s,], color = "black", opacity = 1, weight = 1) %>%
       addLegend(position = "bottomright", pal = mypal, values = 100*tmpS$iso,na.label = "Sem dados",
-                title = paste("Índice de Isolamento social (0-100) <br> em ",format.Date(end_quar, "%d"),"/",
-                              format.Date(end_quar, "%m"),"/2020",sep = ""),opacity = 0.8)
+                title = paste("Mediana Índice de Isolamento social (0-100) <br> 15/03/2020 a ",format.Date(end_quar, "%d"),"/",
+                              format.Date(end_quar, "%m"),"/2021",sep = ""),opacity = 0.8)
 
     #Save
     saveWidget(mapa, file = paste(getwd(),"/html/mapa_",s,".html",sep = ""),
@@ -283,7 +289,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
       if(length(x) < 10)
         seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 1) %>% format("%d/%m")
       else
-        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 30) %>% format("%d/%m")
+        seq.Date(from = ymd(ini_quar),to = ymd(end_quar),by = 60) %>% format("%d/%m/%y")
     }
 
     breaks_fun_y <- function(x) {
@@ -311,14 +317,15 @@ isolation_map <- function(end_quar = "2020-04-27"){
       }
       tmp$color_line[is.na(tmp$color_line)] <- "white"
       tmp$color_line <- factor(tmp$color_line)
-      tmp$day <- factor(tmp$day %>% format("%d/%m"),unique(tmp$day)[order(unique(tmp$day))]  %>% format("%d/%m"))
+      tmp$day <- factor(tmp$day %>% format("%d/%m/%y"),unique(tmp$day)[order(unique(tmp$day))]  %>% format("%d/%m/%y"))
       tmp$indice <- factor(x = tmp$indice,levels = c("indice_pan","indice_pre","indice_week","iso"))
+      tmp <- tmp %>% filter(indice %in% c("indice_pre","iso")) %>% droplevels()
 
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
-        xlab("Data") + facet_wrap(facets = "indice",scales = "free",nrow = 2,ncol = 2,
+        xlab("Data") + facet_wrap(facets = "indice",scales = "free",nrow = 2,ncol = 1,
                                   labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
-                                                           indice_week = "Variação em relação a semana anterior (%)",
-                                                           indice_pan = "Variação em relação ao padrão durante pandemia (%)",
+                                                           #indice_week = "Variação em relação a semana anterior (%)",
+                                                           #indice_pan = "Variação em relação ao padrão durante pandemia (%)",
                                                            indice_pre = "Variação em relação ao padrão de Fev/20 (%)"))) +
         ylab(NULL) +
         theme(strip.background = element_blank(),
@@ -339,7 +346,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
         scale_y_continuous(breaks = breaks_fun_y) +
         ggtitle(paste("Isolamento Social Comparativo IME - USP\n",c," - ",s,sep = "")) +
         labs(caption = "©IME - USP. Design: Diego Marcondes. Para mais informações e conteúdo sobre a COVID-19 acesse www.ime.usp.br/~pedrosp/covid19/") +
-        geom_hline(data = dline,aes(yintercept = y),
+        geom_hline(data = dline %>% filter(indice %in% c("indice_pre")),aes(yintercept = y),
                    color = "white",linetype = "dashed")
 
       pdf(file = paste("./html/plots/isol_",
