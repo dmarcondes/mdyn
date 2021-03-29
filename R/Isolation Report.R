@@ -21,6 +21,7 @@
 #' @import gridExtra
 #' @import foreach
 #' @import doParallel
+#' @import zoo
 #' @export
 #' @title Isolation Map in Brazil
 #'
@@ -34,7 +35,7 @@
 #' #Run for data until 2020-04-26
 #' isolation_map(end_quar = "2020-04-26) #Take very long time!!
 
-isolation_map <- function(end_quar = "2020-04-27"){
+isolation_map <- function(end_quar = "2021-03-15"){
 
   #q <- readline(paste("This will erase all content in ",getwd(),"/plots, are you sure you wnat to continue (y/n)?",sep = ""))
   #if(!(q %in% c("y","Y","yes","Yes","YES","sim","SIM","s","S"))){
@@ -266,7 +267,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
   system("rm -r ./html/plots")
   dir.create("./html/plots")
 
-  foreach(s = estados,.packages = c("raster","tidyverse","ggplot2","ggthemes","lubridate")) %dopar% {
+  foreach(s = estados,.packages = c("raster","tidyverse","ggplot2","ggthemes","lubridate","zoo")) %dopar% {
     acento <- function(x) iconv(x, to = "ASCII//TRANSLIT")
     cat("State: ")
     cat(s)
@@ -282,8 +283,8 @@ isolation_map <- function(end_quar = "2020-04-27"){
     dados$cor[dados$value >= 0] <- "green"
     dados$cor[dados$indice == "iso"] <- "white"
     dados$cor <- factor(dados$cor)
-    dados$indice[dados$indice == "indice_pan" & dados$day < max(dados$day) - 7] <- NA
-    dados$indice[dados$indice == "indice_week" & dados$day < max(dados$day) - 7] <- NA
+    #dados$indice[dados$indice == "indice_pan" & dados$day < max(dados$day) - 7] <- NA
+    #dados$indice[dados$indice == "indice_week" & dados$day < max(dados$day) - 7] <- NA
 
     breaks_fun <- function(x) {
       if(length(x) < 10)
@@ -303,10 +304,7 @@ isolation_map <- function(end_quar = "2020-04-27"){
 
     for(c in unique(dados$reg_name)){
       tmp <- dados %>% filter(day %in% dias_quar & reg_name == c) %>% dplyr::select(day,value,cor,indice) %>% na.omit()
-      if(min(tmp$value[tmp$indice == "indice_pre"]) > 0)
-        dline <- data.frame("y" = c(0,0),"indice" = c("indice_week","indice_pan"))
-      else
-        dline <- data.frame("y" = c(0,0,0),"indice" = c("indice_week","indice_pan","indice_pre"))
+      dline <- data.frame("y" = 0,"indice" = "indice_pre")
       tmp$color_line <- NA
       tmp$color_line[tmp$indice == "iso"] <- "white"
       for(d in (min(tmp$day)):(max(tmp$day)-1)){
@@ -321,6 +319,11 @@ isolation_map <- function(end_quar = "2020-04-27"){
       tmp$indice <- factor(x = tmp$indice,levels = c("indice_pan","indice_pre","indice_week","iso"))
       tmp <- tmp %>% filter(indice %in% c("indice_pre","iso")) %>% droplevels()
 
+      if(length(tmp$cor[tmp$cor == "red"]) > 0)
+        Col <- c("green","red","white")
+      else
+        Col <- c("green","white")
+
       p <- ggplot(tmp,aes(x = day,y = value,colour = cor)) + theme_solarized(light = FALSE) +
         xlab("Data") + facet_wrap(facets = "indice",scales = "free",nrow = 2,ncol = 1,
                                   labeller = as_labeller(c(iso = "Índice de Isolamento Social (0-100)",
@@ -330,8 +333,8 @@ isolation_map <- function(end_quar = "2020-04-27"){
         ylab(NULL) +
         theme(strip.background = element_blank(),
               strip.text = element_text(size = 20,face = "bold",color = "white")) +
-        geom_point() + geom_line(aes(colour = color_line,group = 1)) +
-        scale_colour_manual(values = c("green","red","white")) +
+        geom_point() + geom_line(aes(y=rollmean(value, 7, na.pad=TRUE),colour = color_line,group = 1)) +
+        scale_colour_manual(values = Col) +
         scale_x_discrete(breaks = breaks_fun) +
         theme(legend.title = element_text(face = "bold"),legend.position = "none") +
         theme(plot.title = element_text(face = "bold",size = 25,color = "white",hjust = 0.5),
